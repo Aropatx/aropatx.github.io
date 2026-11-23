@@ -1,0 +1,45 @@
+name: Aktualizuj wersje aplikacji
+
+on:
+  schedule:
+    - cron: '17 * * * *'   # co godzinę
+  workflow_dispatch:         # ręcznie: Actions → Aktualizuj wersje aplikacji → Run workflow
+  repository_dispatch:       # natychmiast po wydaniu, jeśli repozytorium aplikacji to wywoła
+    types: [release-published]
+  push:
+    branches: [main]
+    paths: [apps.js, .github/scripts/update-releases.mjs, .github/workflows/update-releases.yml]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-releases
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Pobierz najnowsze wydania
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node .github/scripts/update-releases.mjs
+
+      - name: Zapisz zmiany
+        run: |
+          if git diff --quiet -- releases.json && git ls-files --error-unmatch releases.json >/dev/null 2>&1; then
+            echo "Brak nowych wersji."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add releases.json
+          git commit -m "Aktualizacja wersji aplikacji"
+          git push

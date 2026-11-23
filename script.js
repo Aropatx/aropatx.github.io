@@ -214,30 +214,66 @@
     }
   }
 
+  // Wersja z tagu: "v2.5.2", "2.5.2", "Replay-v2.5.2" -> "2.5.2".
+  const cleanVersion = (tag) => {
+    const str = String(tag || '').trim();
+    const m = str.match(/\d+(?:\.\d+)+[0-9A-Za-z.+-]*/);
+    return m ? m[0] : (str.replace(/^v/i, '') || null);
+  };
+
+  // Kopia danych zapisywana co godzinę przez GitHub Action (.github/workflows/update-releases.yml).
+  // Używana, gdy API GitHuba odmówi (limit 60 zapytań/h na adres IP).
+  const SNAPSHOT_URLS = [
+    'https://raw.githubusercontent.com/Aropatx/aropatx.github.io/main/releases.json',
+    'releases.json',
+  ];
+  let snapshotPromise = null;
+  const loadSnapshot = () => snapshotPromise || (snapshotPromise = (async () => {
+    for (const url of SNAPSHOT_URLS) {
+      try {
+        const res = await fetch(url, { cache: 'no-cache' });
+        if (!res.ok) continue;
+        const j = await res.json();
+        if (j && j.apps) return j.apps;
+      } catch (e) { /* następne źródło */ }
+    }
+    return {};
+  })());
+
+  const CACHE_TTL = 10 * 60 * 1000;
+
   async function loadRelease(app) {
     if (!app.repo) { relState[app.id] = 'fail'; return; }
-    const key = 'rel2:' + app.repo;
+    const key = 'rel3:' + app.repo;
     let data = null;
-    const cached = session.get(key);
-    if (cached) { try { data = JSON.parse(cached); } catch (e) { data = null; } }
+    try {
+      const cached = JSON.parse(session.get(key) || 'null');
+      if (cached && cached.t && Date.now() - cached.t < CACHE_TTL) data = cached.d;
+    } catch (e) { data = null; }
+
     if (!data) {
       try {
-        const res = await fetch(`https://api.github.com/repos/${app.repo}/releases/latest`, { headers: { Accept: 'application/vnd.github+json' } });
+        const res = await fetch(`https://api.github.com/repos/${app.repo}/releases/latest`, { headers: { Accept: 'application/vnd.github+json' }, cache: 'no-cache' });
         if (!res.ok) throw new Error(String(res.status));
         const j = await res.json();
         const asset = (j.assets || []).find((a) => a.name === app.asset);
         data = {
-          v: String(j.tag_name || '').replace(/^v/i, '') || null,
+          v: cleanVersion(j.tag_name),
           date: j.published_at || null,
           size: asset ? asset.size : null,
           url: j.html_url || null,
         };
-        session.set(key, JSON.stringify(data));
+        session.set(key, JSON.stringify({ t: Date.now(), d: data }));
       } catch (e) {
-        relState[app.id] = 'fail';
-        fillMeta();
-        return;
+        const snap = await loadSnapshot();
+        data = snap[app.id] || null;
       }
+    }
+
+    if (!data) {
+      relState[app.id] = 'fail';
+      fillMeta();
+      return;
     }
     rel[app.id] = data;
     relState[app.id] = 'ok';

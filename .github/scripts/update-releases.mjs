@@ -39,6 +39,7 @@ for (const app of apps) {
       v: cleanVersion(j.tag_name),
       date: j.published_at || j.created_at || null,
       size: asset ? asset.size : null,
+      file: asset ? asset.name : null,
       url: j.html_url || null,
     };
     console.log(`${app.id}: v${result[app.id].v}, ${result[app.id].size} B, ${result[app.id].date}`);

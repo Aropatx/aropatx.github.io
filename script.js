@@ -179,7 +179,9 @@
   /* ---------------- Release data (GitHub API) ---------------- */
   const rel = {};
   const relState = {};
-  const downloadUrl = (app) => `https://github.com/${app.repo}/releases/latest/download/${app.asset}`;
+  // Nazwa instalatora: prawdziwa z najnowszego wydania, a do czasu jej pobrania — z apps.js.
+  const assetName = (app) => (rel[app.id] && rel[app.id].file) || app.asset;
+  const downloadUrl = (app) => `https://github.com/${app.repo}/releases/latest/download/${encodeURIComponent(assetName(app))}`;
   const repoUrl = (app) => `https://github.com/${app.repo}`;
   const fmtSize = (b) => new Intl.NumberFormat(lang === 'pl' ? 'pl-PL' : 'en-US', { maximumFractionDigits: 1 }).format(b / 1048576) + ' MB';
   const fmtDate = (iso) => {
@@ -211,6 +213,7 @@
       });
       $$(`[data-new="${id}"]`).forEach((el) => { el.hidden = !isFresh(app); });
       $$(`[data-notes="${id}"]`).forEach((el) => { if (d.url) el.href = d.url; });
+      if (app.repo) $$(`[data-download="${id}"]`).forEach((el) => { el.href = downloadUrl(app); });
     }
   }
 
@@ -253,7 +256,7 @@
 
   async function loadRelease(app) {
     if (!app.repo) { relState[app.id] = 'fail'; return; }
-    const key = 'rel3:' + app.repo;
+    const key = 'rel4:' + app.repo;
     let data = null;
     try {
       const cached = JSON.parse(session.get(key) || 'null');
@@ -270,6 +273,7 @@
           v: cleanVersion(j.tag_name),
           date: j.published_at || j.created_at || null,
           size: asset ? asset.size : null,
+          file: asset ? asset.name : null,
           url: j.html_url || null,
         };
         // Brakujące pola uzupełnij z kopii, jeśli dotyczy tej samej wersji.
@@ -278,6 +282,7 @@
           if (s && s.v === data.v) {
             data.size = data.size || s.size || null;
             data.date = data.date || s.date || null;
+            data.file = data.file || s.file || null;
           }
         }
         session.set(key, JSON.stringify({ t: Date.now(), d: data }));
@@ -698,7 +703,7 @@
     $('#mdIcon').src = app.icon;
     $('#mdTitle').textContent = t('mdTitle');
     $('#mdSub').textContent = t('mdSub').replace('{app}', app.name);
-    $('#mdSteps').innerHTML = ['md1', 'md2', 'md3'].map((k) => `<li>${t(k).replace('{file}', esc(app.asset))}</li>`).join('');
+    $('#mdSteps').innerHTML = ['md1', 'md2', 'md3'].map((k) => `<li>${t(k).replace('{file}', esc(assetName(app)))}</li>`).join('');
     $('#mdRetryTxt').textContent = t('mdRetryTxt');
     const retry = $('#mdRetry');
     retry.textContent = t('mdRetry');

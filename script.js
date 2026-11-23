@@ -242,6 +242,15 @@
 
   const CACHE_TTL = 10 * 60 * 1000;
 
+  // Instalator z wydania: dokładna nazwa z apps.js, a gdy jej nie ma — pierwszy plik .exe/.msi.
+  const pickAsset = (assets, name) => {
+    const list = Array.isArray(assets) ? assets : [];
+    return list.find((a) => a.name === name)
+      || list.find((a) => name && a.name.toLowerCase() === String(name).toLowerCase())
+      || list.find((a) => /\.(exe|msi)$/i.test(a.name))
+      || null;
+  };
+
   async function loadRelease(app) {
     if (!app.repo) { relState[app.id] = 'fail'; return; }
     const key = 'rel3:' + app.repo;
@@ -256,13 +265,21 @@
         const res = await fetch(`https://api.github.com/repos/${app.repo}/releases/latest`, { headers: { Accept: 'application/vnd.github+json' }, cache: 'no-cache' });
         if (!res.ok) throw new Error(String(res.status));
         const j = await res.json();
-        const asset = (j.assets || []).find((a) => a.name === app.asset);
+        const asset = pickAsset(j.assets, app.asset);
         data = {
           v: cleanVersion(j.tag_name),
-          date: j.published_at || null,
+          date: j.published_at || j.created_at || null,
           size: asset ? asset.size : null,
           url: j.html_url || null,
         };
+        // Brakujące pola uzupełnij z kopii, jeśli dotyczy tej samej wersji.
+        if (!data.size || !data.date) {
+          const s = (await loadSnapshot())[app.id];
+          if (s && s.v === data.v) {
+            data.size = data.size || s.size || null;
+            data.date = data.date || s.date || null;
+          }
+        }
         session.set(key, JSON.stringify({ t: Date.now(), d: data }));
       } catch (e) {
         const snap = await loadSnapshot();

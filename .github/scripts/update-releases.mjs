@@ -30,14 +30,18 @@ for (const app of apps) {
     const res = await fetch(`https://api.github.com/repos/${app.repo}/releases/latest`, { headers });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const j = await res.json();
-    const asset = (j.assets || []).find((a) => a.name === app.asset);
+    const assets = Array.isArray(j.assets) ? j.assets : [];
+    const asset = assets.find((a) => a.name === app.asset)
+      || assets.find((a) => a.name.toLowerCase() === String(app.asset || '').toLowerCase())
+      || assets.find((a) => /\.(exe|msi)$/i.test(a.name));
+    if (!asset) console.warn(`${app.id}: brak pliku instalatora w wydaniu`);
     result[app.id] = {
       v: cleanVersion(j.tag_name),
-      date: j.published_at || null,
+      date: j.published_at || j.created_at || null,
       size: asset ? asset.size : null,
       url: j.html_url || null,
     };
-    console.log(`${app.id}: ${result[app.id].v}`);
+    console.log(`${app.id}: v${result[app.id].v}, ${result[app.id].size} B, ${result[app.id].date}`);
   } catch (e) {
     failures++;
     console.warn(`${app.id}: ${e.message} — zostawiam poprzednie dane`);

@@ -46,6 +46,7 @@
     <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></symbol>
     <symbol id="i-folder" viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9l-.8-1.2A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z"/></symbol>
     <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+    <symbol id="i-coffee" viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M6 2v2M10 2v2M14 2v2"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
     <symbol id="i-replay" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></symbol>
     <symbol id="i-package" viewBox="0 0 24 24"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></symbol>
@@ -91,6 +92,10 @@
       <a href="#/" class="is-active" id="navLibrary" data-ui="library">Biblioteka</a>
     </nav>
     <div class="nav__actions">
+      <a class="coffee coffee--nav" href="https://buymeacoffee.com/aropatx" target="_blank" rel="noopener" data-ui-aria="coffee" aria-label="Kup mi kawę">
+        <svg class="ic ic--sm" aria-hidden="true"><use href="#i-coffee"/></svg>
+        <span data-ui="coffeeShort">Kawa</span>
+      </a>
       <div class="lang" role="group" aria-label="Język / Language">
         <button type="button" class="lang__btn" data-lang="pl" aria-pressed="true">PL</button>
         <button type="button" class="lang__btn" data-lang="en" aria-pressed="false">EN</button>
@@ -117,6 +122,11 @@
       <div class="sidebar__label" data-ui="appsLabel">Aplikacje</div>
       <div class="sidebar__list" id="sideList"></div>
     </nav>
+    <a class="coffee coffee--side" href="https://buymeacoffee.com/aropatx" target="_blank" rel="noopener">
+      <span class="coffee__ic" aria-hidden="true"><svg class="ic"><use href="#i-coffee"/></svg></span>
+      <span class="coffee__label"><b data-ui="coffee">Kup mi kawę</b><small data-ui="coffeeSub">Wesprzyj rozwój aplikacji</small></span>
+      <svg class="ic ic--sm coffee__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+    </a>
     <div class="sidebar__foot">
       <svg class="ic ic--sm" aria-hidden="true"><use href="#i-windows"/></svg>
       <span>Windows 10 / 11 · 64-bit</span>

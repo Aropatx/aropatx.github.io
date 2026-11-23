@@ -702,6 +702,41 @@ mark { background: rgba(212, 175, 55, .28); color: inherit; border-radius: 3px; 
 @keyframes vtOut { to { opacity: 0; } }
 @keyframes vtIn { from { opacity: 0; } }
 
+/* ---------------- Buy me a coffee ---------------- */
+.coffee {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: flex; align-items: center; gap: 12px;
+  color: var(--gold-ink); background: var(--gold-grad);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), inset 0 0 0 1px rgba(255, 255, 255, .16), inset 0 -2px 0 rgba(90, 60, 0, .28), 0 12px 30px -12px rgba(212, 175, 55, .8);
+  transition: transform .2s var(--ease), box-shadow .3s var(--ease), filter .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.coffee::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, .45) 50%, transparent 70%);
+  transform: translateX(-120%); animation: autoShine 5.5s var(--ease) 2s infinite;
+}
+.coffee:hover { filter: brightness(1.08) saturate(1.05); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), inset 0 0 0 1px rgba(255, 255, 255, .16), inset 0 -2px 0 rgba(90, 60, 0, .28), 0 18px 40px -12px rgba(212, 175, 55, 1); }
+.coffee:active { transform: scale(.975); }
+.coffee .ic { stroke-width: 2.2; }
+
+.coffee--side { margin: 16px 0 0; padding: 10px 12px 10px 10px; border-radius: 14px; }
+.coffee--side:hover { transform: translateY(-1px); }
+.coffee__ic {
+  display: grid; place-items: center; width: 36px; height: 36px; flex: none; border-radius: 10px;
+  background: rgba(26, 19, 5, .14); box-shadow: inset 0 0 0 1px rgba(26, 19, 5, .12), inset 0 1px 0 rgba(255, 255, 255, .25);
+}
+.coffee__ic .ic { transform-origin: 50% 80%; transition: transform .45s var(--ease-spring); }
+.coffee:hover .coffee__ic .ic { transform: rotate(-12deg) scale(1.1); }
+.coffee__label { min-width: 0; display: flex; flex-direction: column; line-height: 1.2; }
+.coffee__label b { font-size: .92rem; font-weight: 700; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.coffee__label small { font-size: .7rem; font-weight: 500; opacity: .72; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.coffee__arrow { margin-left: auto; opacity: .7; transition: transform .25s var(--ease), opacity .2s; }
+.coffee:hover .coffee__arrow { transform: translateX(3px); opacity: 1; }
+.coffee--side + .sidebar__foot { margin-top: 14px; }
+
+.coffee--nav { display: none; height: 36px; gap: 7px; padding: 0 13px 0 11px; border-radius: 11px; font-size: .82rem; font-weight: 700; letter-spacing: -.01em; white-space: nowrap; }
+
 /* ---------------- Responsive ---------------- */
 @media (max-width: 1180px) {
   .detail__grid { grid-template-columns: minmax(0, 1fr); }
@@ -725,7 +760,8 @@ mark { background: rgba(212, 175, 55, .28); color: inherit; border-radius: 3px; 
     background: rgba(8, 7, 5, .82);
     backdrop-filter: saturate(160%) blur(18px); -webkit-backdrop-filter: saturate(160%) blur(18px);
   }
-  .sidebar__head, .sidebar__label, .sidebar__foot, .search__kbd { display: none; }
+  .sidebar__head, .sidebar__label, .sidebar__foot, .search__kbd, .coffee--side { display: none; }
+  .coffee--nav { display: inline-flex; }
   .search { margin-bottom: 10px; }
   .sidebar__nav { flex-direction: row; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px; scroll-snap-type: x proximity; }
   .sidebar__nav::-webkit-scrollbar { display: none; }
@@ -743,6 +779,7 @@ mark { background: rgba(212, 175, 55, .28); color: inherit; border-radius: 3px; 
 }
 @media (max-width: 600px) {
   .nav__inner { padding: 0 16px; gap: 14px; }
+  .nav__actions { gap: 8px; }
   .home__head h1 { font-size: 2rem; }
   .spot { border-radius: 20px; margin-bottom: 30px; }
   .spot__slide { padding: 26px 22px 92px; }
@@ -772,6 +809,12 @@ mark { background: rgba(212, 175, 55, .28); color: inherit; border-radius: 3px; 
   .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .facts > div, .facts > div:first-child { padding: 0 0 0 12px; border-left: 2px solid var(--border); }
   .footer { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 380px) {
+  .nav__inner { gap: 10px; }
+  .nav__links a { padding: 8px 6px; letter-spacing: .08em; }
+  .coffee--nav { width: 36px; padding: 0; justify-content: center; }
+  .coffee--nav span { display: none; }
 }
 @media (hover: none) {
   .tile__dl { opacity: 1; transform: none; }

@@ -4,12 +4,14 @@
       "v": "6.1.4",
       "date": "2026-11-22T19:00:38Z",
       "size": 54844061,
+      "file": "DownloaderStudio-Setup.exe",
       "url": "https://github.com/Aropatx/DownloaderStudio-Installer/releases/tag/v6.1.4"
     },
     "replay": {
       "v": "2.5.3",
       "date": "2026-11-23T18:43:05Z",
       "size": 117903362,
+      "file": "Replay-Setup.exe",
       "url": "https://github.com/Aropatx/Replay/releases/tag/v2.5.3"
     }
   }

@@ -7,14 +7,6 @@
 
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
-  const store = {
-    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
-    set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* ignore */ } },
-  };
-  const session = {
-    get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
-    set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) { /* ignore */ } },
-  };
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const sel = (s) => (window.CSS && CSS.escape ? CSS.escape(s) : s);
   const ic = (name, cls = '') => `<svg class="ic${cls ? ' ' + cls : ''}" aria-hidden="true"><use href="#i-${esc(name)}"/></svg>`;
@@ -70,6 +62,20 @@
       notFound: 'Nie znaleziono aplikacji.',
       notFoundHint: 'Ta aplikacja nie istnieje albo została przeniesiona.',
       disclaimer: 'Aplikacje nie są powiązane z YouTube ani Google. Znaki towarowe należą do ich właścicieli.',
+      privacy: 'Prywatność',
+      privacyIntro: 'SAT to katalog aplikacji prowadzony przez Aropatx. Strona nie ma kont użytkowników, reklam ani narzędzi analitycznych.',
+      privacyHosting: 'Hosting i informacje o wydaniach',
+      privacyHostingText: 'GitHub Pages zapisuje adres IP odwiedzających w celach bezpieczeństwa. Przeglądarka łączy się też z GitHubem, żeby pobrać informacje o aktualnych wydaniach. Przycisk pobierania prowadzi do instalatora w GitHub Releases. Szczegóły dotyczące danych przetwarzanych przez GitHub i Twoich praw opisuje jego polityka prywatności.',
+      privacyGithubLink: 'Polityka prywatności GitHuba',
+      privacySettings: 'Język strony',
+      privacySettingsText: 'Strona domyślnie używa języka przeglądarki. Wybranie PL lub EN zapisuje ten wybór w adresie strony.',
+      privacySupport: 'Wsparcie przez Buy Me a Coffee',
+      privacySupportText: 'Przycisk „Kup mi kawę” otwiera zewnętrzny serwis Buy Me a Coffee. Przy wpłacie serwis może udostępnić twórcy nazwę, adres e-mail, wiadomość oraz kwotę i datę wpłaty.',
+      privacySupportLink: 'Polityka prywatności Buy Me a Coffee',
+      privacyContact: 'Kontakt',
+      privacyContactText: 'Profil autora katalogu znajduje się na GitHubie. W sprawach danych przetwarzanych przez GitHub skorzystaj z jego formularza dotyczącego prywatności.',
+      privacyAuthorLink: 'Aropatx na GitHubie',
+      privacyGithubContactLink: 'Formularz GitHub Privacy',
       close: 'Zamknij',
       mdTitle: 'Pobieranie rozpoczęte',
       mdSub: 'Instalacja aplikacji {app}:',
@@ -126,6 +132,20 @@
       notFound: 'App not found.',
       notFoundHint: "This app doesn't exist or has moved.",
       disclaimer: 'These apps are not affiliated with YouTube or Google. Trademarks belong to their respective owners.',
+      privacy: 'Privacy',
+      privacyIntro: 'SAT is an app catalog maintained by Aropatx. The site has no user accounts, ads, or analytics tools.',
+      privacyHosting: 'Hosting and release information',
+      privacyHostingText: 'GitHub Pages logs visitors’ IP addresses for security purposes. Your browser also requests current release information from GitHub. Download buttons lead to installers published on GitHub Releases. See GitHub’s privacy statement for how GitHub handles data and how to exercise your rights.',
+      privacyGithubLink: 'GitHub Privacy Statement',
+      privacySettings: 'Site language',
+      privacySettingsText: 'The site starts in your browser’s preferred language. Choosing PL or EN keeps the selection in the page address.',
+      privacySupport: 'Support through Buy Me a Coffee',
+      privacySupportText: 'The “Buy me a coffee” link opens the external Buy Me a Coffee website. For a contribution, the service may share your name, email address, message, and the amount and date of the contribution with the creator.',
+      privacySupportLink: 'Buy Me a Coffee Privacy Policy',
+      privacyContact: 'Contact',
+      privacyContactText: 'The catalog maintainer has a profile on GitHub. For questions about data handled by GitHub, use its privacy contact form.',
+      privacyAuthorLink: 'Aropatx on GitHub',
+      privacyGithubContactLink: 'GitHub privacy contact form',
       close: 'Close',
       mdTitle: 'Download started',
       mdSub: 'Installing {app}:',
@@ -145,8 +165,8 @@
   const tx = (obj) => (obj && typeof obj === 'object') ? (obj[lang] || obj.pl || obj.en || '') : (obj || '');
 
   function detectLang() {
-    const saved = store.get('lang');
-    if (saved === 'pl' || saved === 'en') return saved;
+    const selected = new URLSearchParams(location.search).get('lang');
+    if (selected === 'pl' || selected === 'en') return selected;
     const list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'en'];
     for (const l of list) {
       const code = String(l || '').toLowerCase().slice(0, 2);
@@ -167,14 +187,16 @@
     $('.lang').dataset.active = lang;
   }
 
-  function setLang(next, save) {
+  function setLang(next) {
     if (next === lang) return;
+    const url = new URL(location.href);
+    url.searchParams.set('lang', next);
+    history.replaceState(history.state, '', url);
     lang = next;
-    if (save) store.set('lang', next);
     applyStaticText();
     render();
   }
-  $$('.lang__btn').forEach((b) => b.addEventListener('click', () => setLang(b.dataset.lang, true)));
+  $$('.lang__btn').forEach((b) => b.addEventListener('click', () => setLang(b.dataset.lang)));
 
   /* ---------------- Release data (GitHub API) ---------------- */
   const rel = {};
@@ -234,7 +256,7 @@
   const loadSnapshot = () => snapshotPromise || (snapshotPromise = (async () => {
     for (const url of SNAPSHOT_URLS) {
       try {
-        const res = await fetch(url, { cache: 'no-cache' });
+        const res = await fetch(url, { cache: 'no-cache', credentials: 'omit', referrerPolicy: 'no-referrer' });
         if (!res.ok) continue;
         const j = await res.json();
         if (j && j.apps) return j.apps;
@@ -242,8 +264,6 @@
     }
     return {};
   })());
-
-  const CACHE_TTL = 10 * 60 * 1000;
 
   // Instalator z wydania: dokładna nazwa z apps.js, a gdy jej nie ma — pierwszy plik .exe/.msi.
   const pickAsset = (assets, name) => {
@@ -256,40 +276,36 @@
 
   async function loadRelease(app) {
     if (!app.repo) { relState[app.id] = 'fail'; return; }
-    const key = 'rel4:' + app.repo;
-    let data = null;
+    let data;
     try {
-      const cached = JSON.parse(session.get(key) || 'null');
-      if (cached && cached.t && Date.now() - cached.t < CACHE_TTL) data = cached.d;
-    } catch (e) { data = null; }
-
-    if (!data) {
-      try {
-        const res = await fetch(`https://api.github.com/repos/${app.repo}/releases/latest`, { headers: { Accept: 'application/vnd.github+json' }, cache: 'no-cache' });
-        if (!res.ok) throw new Error(String(res.status));
-        const j = await res.json();
-        const asset = pickAsset(j.assets, app.asset);
-        data = {
-          v: cleanVersion(j.tag_name),
-          date: j.published_at || j.created_at || null,
-          size: asset ? asset.size : null,
-          file: asset ? asset.name : null,
-          url: j.html_url || null,
-        };
-        // Brakujące pola uzupełnij z kopii, jeśli dotyczy tej samej wersji.
-        if (!data.size || !data.date) {
-          const s = (await loadSnapshot())[app.id];
-          if (s && s.v === data.v) {
-            data.size = data.size || s.size || null;
-            data.date = data.date || s.date || null;
-            data.file = data.file || s.file || null;
-          }
+      const res = await fetch(`https://api.github.com/repos/${app.repo}/releases/latest`, {
+        headers: { Accept: 'application/vnd.github+json' },
+        cache: 'no-cache',
+        credentials: 'omit',
+        referrerPolicy: 'no-referrer',
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      const j = await res.json();
+      const asset = pickAsset(j.assets, app.asset);
+      data = {
+        v: cleanVersion(j.tag_name),
+        date: j.published_at || j.created_at || null,
+        size: asset ? asset.size : null,
+        file: asset ? asset.name : null,
+        url: j.html_url || null,
+      };
+      // Brakujące pola uzupełnij z kopii, jeśli dotyczy tej samej wersji.
+      if (!data.size || !data.date) {
+        const s = (await loadSnapshot())[app.id];
+        if (s && s.v === data.v) {
+          data.size = data.size || s.size || null;
+          data.date = data.date || s.date || null;
+          data.file = data.file || s.file || null;
         }
-        session.set(key, JSON.stringify({ t: Date.now(), d: data }));
-      } catch (e) {
-        const snap = await loadSnapshot();
-        data = snap[app.id] || null;
       }
+    } catch (e) {
+      const snapshot = await loadSnapshot();
+      data = snapshot[app.id];
     }
 
     if (!data) {
@@ -485,6 +501,19 @@
   }
 
   /* ---------------- Detail ---------------- */
+  const externalLink = (href, label) => `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;
+  const distributionLinks = (app) => (app.distribution?.links || []).map(({ href, label }) => externalLink(href, tx(label))).join('');
+
+  function renderDistribution(app) {
+    if (!app.distribution) return '';
+    return `
+      <section class="block distribution">
+        <h2>${esc(tx(app.distribution.title))}</h2>
+        ${app.distribution.paragraphs.map((paragraph) => `<p>${esc(tx(paragraph))}</p>`).join('')}
+        <div class="reference-links">${distributionLinks(app)}</div>
+      </section>`;
+  }
+
   function renderDetail(app) {
     const feats = (app.features || []).map((f, i) => `
       <div class="feat" style="--i:${i}">
@@ -516,7 +545,7 @@
             <img class="banner__icon" src="${esc(app.icon)}" alt="" width="112" height="112" style="view-transition-name:${vtName(app)}">
             <div>
               <div class="banner__eyebrow">
-                <span class="badge">${ic('windows')}Windows 10 / 11</span>
+                <span class="badge">${ic('monitor')}Windows 10 / 11</span>
                 <span class="badge" data-ver="${esc(app.id)}">${esc(version(app))}</span>
                 ${newBadge(app)}
               </div>
@@ -536,10 +565,11 @@
             <div style="--i:0"><dt>${esc(t('version'))}</dt><dd data-ver="${esc(app.id)}">${esc(version(app))}</dd></div>
             <div style="--i:1"><dt>${esc(t('size'))}</dt><dd data-size="${esc(app.id)}"></dd></div>
             <div style="--i:2"><dt>${esc(t('released'))}</dt><dd data-date="${esc(app.id)}"></dd></div>
-            <div style="--i:3"><dt>${esc(t('system'))}</dt><dd class="facts__os">${ic('windows', 'ic--sm')}Windows 10 / 11</dd></div>
+            <div style="--i:3"><dt>${esc(t('system'))}</dt><dd class="facts__os">${ic('monitor', 'ic--sm')}Windows 10 / 11</dd></div>
           </dl>
         </div>
         ${osNote}
+        ${renderDistribution(app)}
 
         <div class="detail__grid">
           <div class="detail__main">
@@ -570,6 +600,37 @@
     document.title = `${app.name} — SAT`;
   }
 
+  function renderPrivacy() {
+    view.innerHTML = `
+      <article class="privacy">
+        <nav class="crumbs"><a href="#/">${ic('back', 'ic--sm')}${esc(t('back'))}</a></nav>
+        <header class="privacy__head"><h1>${esc(t('privacy'))}</h1><p>${esc(t('privacyIntro'))}</p></header>
+        <section class="block distribution">
+          <h2>${esc(t('privacyHosting'))}</h2>
+          <p>${esc(t('privacyHostingText'))}</p>
+          <div class="reference-links">${externalLink('https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement', t('privacyGithubLink'))}</div>
+        </section>
+        <section class="block distribution">
+          <h2>${esc(t('privacySettings'))}</h2>
+          <p>${esc(t('privacySettingsText'))}</p>
+        </section>
+        <section class="block distribution">
+          <h2>${esc(t('privacySupport'))}</h2>
+          <p>${esc(t('privacySupportText'))}</p>
+          <div class="reference-links">${externalLink('https://buymeacoffee.com/privacy-policy', t('privacySupportLink'))}</div>
+        </section>
+        <section class="block distribution">
+          <h2>${esc(t('privacyContact'))}</h2>
+          <p>${esc(t('privacyContactText'))}</p>
+          <div class="reference-links">
+            ${externalLink('https://github.com/Aropatx', t('privacyAuthorLink'))}
+            ${externalLink('https://support.github.com/contact/privacy', t('privacyGithubContactLink'))}
+          </div>
+        </section>
+      </article>`;
+    document.title = `${t('privacy')} — SAT`;
+  }
+
   function renderNotFound() {
     view.innerHTML = `
       <section class="home">
@@ -584,9 +645,11 @@
     const app = id ? byId(id) : null;
     renderSidebar(app ? app.id : null);
     if (!id) renderHome();
+    else if (id === 'privacy') renderPrivacy();
     else if (app) renderDetail(app);
     else renderNotFound();
     $('#navLibrary').classList.toggle('is-active', !id);
+    $('#privacyLink')?.setAttribute('aria-current', id === 'privacy' ? 'page' : 'false');
     fillMeta();
   }
 
@@ -704,6 +767,12 @@
     $('#mdTitle').textContent = t('mdTitle');
     $('#mdSub').textContent = t('mdSub').replace('{app}', app.name);
     $('#mdSteps').innerHTML = ['md1', 'md2', 'md3'].map((k) => `<li>${t(k).replace('{file}', esc(assetName(app)))}</li>`).join('');
+    const resource = $('#mdResource');
+    if (resource) {
+      const links = distributionLinks(app);
+      resource.innerHTML = links;
+      resource.hidden = !links;
+    }
     $('#mdRetryTxt').textContent = t('mdRetryTxt');
     const retry = $('#mdRetry');
     retry.textContent = t('mdRetry');

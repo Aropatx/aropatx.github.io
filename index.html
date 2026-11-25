@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>SAT — aplikacje dla Windows</title>
-  <meta name="description" content="Oficjalna strona pobierania aplikacji SAT dla Windows: Downloader Studio, Replay i kolejne.">
-  <meta name="theme-color" content="#070605">
+  <meta name="description" content="Pobierz Downloader Studio i Replay na Windows ze strony SAT.">
+  <meta name="theme-color" content="#0e0d10">
   <meta name="color-scheme" content="dark">
   <meta property="og:type" content="website">
   <meta property="og:title" content="SAT — aplikacje dla Windows">
@@ -13,8 +13,7 @@
   <meta property="og:image" content="downloader-studio.png">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23f8e6a8'/%3E%3Cstop offset='.5' stop-color='%23d4af37'/%3E%3Cstop offset='1' stop-color='%23a07a1c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%230d0b08'/%3E%3Cpath d='M32 14v22m-10-10 10 10 10-10M18 46h28' stroke='url(%23g)' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://api.github.com" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=20261125">
-  <script>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="styles.css?v=20261125-2">
 </head>
 <body>
 
@@ -67,10 +66,7 @@
 <!-- ============ BACKGROUND ============ -->
 <div class="bg" aria-hidden="true">
   <canvas class="bg__binary" id="binary"></canvas>
-  <div class="bg__aurora"></div>
   <div class="bg__grid"></div>
-  <div class="bg__vignette"></div>
-  <div class="bg__noise"></div>
 </div>
 
 <a class="skip" href="#view" data-ui="skip">Przejdź do treści</a>
@@ -104,10 +100,6 @@
 <!-- ============ LIBRARY ============ -->
 <div class="library" id="main">
   <aside class="sidebar" aria-label="Biblioteka" data-ui-aria="library">
-    <div class="sidebar__head">
-      <span data-ui="library">Biblioteka</span>
-      <span class="sidebar__count" id="appCount">0</span>
-    </div>
     <label class="search">
       <svg class="ic ic--sm" aria-hidden="true"><use href="#i-search"/></svg>
       <input type="search" id="search" placeholder="Szukaj" data-ui-placeholder="search" data-ui-aria="search" aria-label="Szukaj" autocomplete="off" spellcheck="false">
@@ -115,7 +107,7 @@
     </label>
     <nav class="sidebar__nav" aria-label="Aplikacje" data-ui-aria="appsNav">
       <a class="side-home" href="#/" id="sideHome"><span class="side-home__ic"><svg class="ic ic--sm"><use href="#i-grid"/></svg></span><span data-ui="allApps">Wszystkie aplikacje</span></a>
-      <div class="sidebar__label" data-ui="appsLabel">Aplikacje</div>
+      <div class="sidebar__label" data-ui="appsNav">Aplikacje</div>
       <div class="sidebar__list" id="sideList"></div>
     </nav>
     <a class="coffee coffee--side" href="https://buymeacoffee.com/aropatx" target="_blank" rel="noopener noreferrer">
@@ -123,10 +115,6 @@
       <span class="coffee__label"><b data-ui="coffee">Kup mi kawę</b><small data-ui="coffeeSub">Wesprzyj rozwój aplikacji</small></span>
       <svg class="ic ic--sm coffee__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
     </a>
-    <div class="sidebar__foot">
-      <svg class="ic ic--sm" aria-hidden="true"><use href="#i-monitor"/></svg>
-      <span>Windows 10 / 11 · 64-bit</span>
-    </div>
   </aside>
 
   <div class="main-col">
@@ -134,10 +122,7 @@
 
     <!-- ============ FOOTER ============ -->
     <footer class="footer">
-      <div class="footer__brand">
-        <svg viewBox="0 0 64 64" width="20" height="20" aria-hidden="true"><path d="M32 14v22m-10-10 10 10 10-10M18 46h28" stroke="url(#goldG)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-        <span>© <span id="year">2026</span> SAT</span>
-      </div>
+      <span class="footer__brand">© <span id="year">2026</span> SAT</span>
       <p class="footer__note" data-ui="disclaimer"></p>
       <a class="footer__link" id="privacyLink" href="#/privacy" data-ui="privacy">Prywatność</a>
     </footer>
@@ -152,7 +137,6 @@
     <div class="rings rings--sm" aria-hidden="true"><i></i><i></i></div>
     <div class="modal__sparks" id="mdSparks" aria-hidden="true"></div>
     <img class="modal__icon" id="mdIcon" src="downloader-studio.png" alt="" width="84" height="84">
-    <span class="modal__check" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></span>
   </div>
   <h2 id="mdTitle"></h2>
   <p class="modal__sub" id="mdSub"></p>
@@ -165,7 +149,7 @@
 <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
 <script src="apps.js?v=20261125"></script>
-<script src="script.js?v=20261125" defer></script>
+<script src="script.js?v=20261125-2" defer></script>
 <script src="effects.js" defer></script>
 </body>
 </html>

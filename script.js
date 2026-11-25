@@ -20,25 +20,22 @@
   const UI = {
     pl: {
       title: 'SAT — aplikacje dla Windows',
-      desc: 'Oficjalna strona pobierania aplikacji SAT dla Windows: Downloader Studio, Replay i kolejne.',
+      desc: 'Pobierz Downloader Studio i Replay na Windows ze strony SAT.',
       skip: 'Przejdź do treści',
       library: 'Biblioteka',
       allApps: 'Wszystkie aplikacje',
       coffee: 'Kup mi kawę',
       coffeeShort: 'Kawa',
-      coffeeSub: 'Wesprzyj rozwój aplikacji',
+      coffeeSub: 'Wesprzyj rozwój',
       appsLabel: 'Aplikacje',
       appsNav: 'Aplikacje',
       search: 'Szukaj',
-      appsCount: (n) => `${n} ${n === 1 ? 'aplikacja' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? 'aplikacje' : 'aplikacji'}`,
-      homeSub: 'Wybierz aplikację, aby zobaczyć opis i pobrać instalator.',
+      homeSub: 'Aplikacje na Windows 10 i 11',
       noResults: 'Brak aplikacji pasujących do wyszukiwania.',
       noResultsFor: 'Nic nie pasuje do „{q}”.',
       noResultsHint: 'Spróbuj innej nazwy albo wyczyść wyszukiwanie.',
       results: 'Wyniki wyszukiwania',
-      more: 'Kolejne aplikacje wkrótce',
-      featured: 'Wyróżnione',
-      featuredAria: 'Wyróżnione aplikacje',
+      featuredAria: 'Podgląd aplikacji',
       prev: 'Poprzednia',
       next: 'Następna',
       newBadge: 'Nowa wersja',
@@ -47,6 +44,7 @@
       installer: 'Instalator',
       details: 'Szczegóły',
       back: 'Biblioteka',
+      breadcrumbs: 'Ścieżka nawigacji',
       version: 'Wersja',
       size: 'Rozmiar',
       released: 'Wydano',
@@ -77,38 +75,35 @@
       privacyAuthorLink: 'Aropatx na GitHubie',
       privacyGithubContactLink: 'Formularz GitHub Privacy',
       close: 'Zamknij',
-      mdTitle: 'Pobieranie rozpoczęte',
-      mdSub: 'Instalacja aplikacji {app}:',
-      md1: 'Otwórz plik <code>{file}</code> z folderu Pobrane.',
-      md2: 'Jeśli pojawi się okno SmartScreen, kliknij <b>Więcej informacji</b>, a następnie <b>Uruchom mimo to</b>.',
-      md3: 'Postępuj zgodnie z instrukcjami instalatora.',
+      mdTitle: 'Pobieranie {app}',
+      mdSub: 'Instalator dla Windows 10 i 11',
+      md1: 'Znajdź plik <code>{file}</code> w folderze Pobrane.',
+      md2: 'Sprawdź, czy plik pochodzi z wydania SAT na GitHubie. Jeśli pojawi się ostrzeżenie SmartScreen, zweryfikuj nazwę pliku i jego źródło przed uruchomieniem.',
+      md3: 'Otwórz zweryfikowany plik i postępuj zgodnie z instrukcjami instalatora.',
       mdRetryTxt: 'Pobieranie nie rozpoczęło się?',
       mdRetry: 'Pobierz ponownie',
       copied: 'Link skopiowany',
       copy: 'Kopiuj link',
-      os: 'Korzystasz z systemu {os}. Ta aplikacja działa na Windows 10 i 11 — otwórz tę stronę na komputerze z Windows.',
+      os: 'Korzystasz z systemu {os}. Skopiuj link, aby otworzyć go na komputerze z Windows.',
     },
     en: {
       title: 'SAT — apps for Windows',
-      desc: 'Official download page for SAT Windows apps: Downloader Studio, Replay and more.',
+      desc: 'Download Downloader Studio and Replay for Windows from SAT.',
       skip: 'Skip to content',
       library: 'Library',
       allApps: 'All apps',
       coffee: 'Buy me a coffee',
       coffeeShort: 'Coffee',
-      coffeeSub: 'Support app development',
+      coffeeSub: 'Support development',
       appsLabel: 'Apps',
       appsNav: 'Apps',
       search: 'Search',
-      appsCount: (n) => `${n} ${n === 1 ? 'app' : 'apps'}`,
-      homeSub: 'Select an app to see its description and download the installer.',
+      homeSub: 'Apps for Windows 10 and 11',
       noResults: 'No apps match your search.',
       noResultsFor: 'Nothing matches “{q}”.',
       noResultsHint: 'Try another name or clear the search.',
       results: 'Search results',
-      more: 'More apps coming soon',
-      featured: 'Featured',
-      featuredAria: 'Featured apps',
+      featuredAria: 'App preview',
       prev: 'Previous',
       next: 'Next',
       newBadge: 'New version',
@@ -117,6 +112,7 @@
       installer: 'Installer',
       details: 'Details',
       back: 'Library',
+      breadcrumbs: 'Breadcrumb',
       version: 'Version',
       size: 'Size',
       released: 'Released',
@@ -147,16 +143,16 @@
       privacyAuthorLink: 'Aropatx on GitHub',
       privacyGithubContactLink: 'GitHub privacy contact form',
       close: 'Close',
-      mdTitle: 'Download started',
-      mdSub: 'Installing {app}:',
-      md1: 'Open <code>{file}</code> from your Downloads folder.',
-      md2: 'If a SmartScreen window appears, click <b>More info</b>, then <b>Run anyway</b>.',
-      md3: 'Follow the installer instructions.',
+      mdTitle: 'Downloading {app}',
+      mdSub: 'Installer for Windows 10 and 11',
+      md1: 'Find <code>{file}</code> in your Downloads folder.',
+      md2: 'Check that the file came from a SAT release on GitHub. If SmartScreen displays a warning, verify the filename and its source before running it.',
+      md3: 'Open the verified file and follow the installer instructions.',
       mdRetryTxt: "Download didn't start?",
       mdRetry: 'Download again',
       copied: 'Link copied',
       copy: 'Copy link',
-      os: "You're on {os}. This app runs on Windows 10 and 11 — open this page on a Windows PC.",
+      os: "You're on {os}. Copy this link to open it on a Windows PC.",
     },
   };
 
@@ -355,16 +351,21 @@
   const rings = (n = 3) => `<div class="rings" aria-hidden="true">${'<i></i>'.repeat(n)}</div>`;
   const dlIcon = () => `<span class="btn__ic">${ic('download', 'ic-dl')}${ic('check', 'ic-ok')}</span>`;
   const newBadge = (app) => `<span class="badge badge--new" data-new="${esc(app.id)}"${isFresh(app) ? '' : ' hidden'}>${esc(t('newBadge'))}</span>`;
+  const artwork = (app, transitionName = 'none') => `
+    <div class="app-art" aria-hidden="true">
+      ${rings(2)}
+      <span class="app-art__frame">
+        <img src="${esc(app.icon)}" alt="" width="180" height="180" style="view-transition-name:${transitionName}">
+      </span>
+    </div>`;
 
   /* ---------------- Sidebar ---------------- */
   function renderSidebar(activeId) {
-    $('#appCount').textContent = APPS.length;
     const list = APPS.filter(matches);
     sideList.innerHTML = list.map((app) => `
       <a class="side-item${app.id === activeId ? ' is-active' : ''}" href="#/${esc(app.id)}" style="${accent(app)}"${app.id === activeId ? ' aria-current="page"' : ''}>
         <img src="${esc(app.icon)}" alt="" width="34" height="34">
         <span><b>${highlight(app.name)}</b><small data-ver="${esc(app.id)}">${esc(version(app))}</small></span>
-        <i class="side-item__new" data-new="${esc(app.id)}"${isFresh(app) ? '' : ' hidden'}></i>
       </a>`).join('') || `<p class="side-empty">${esc(t('noResults'))}</p>`;
     const home = $('#sideHome');
     home.classList.toggle('is-active', !activeId);
@@ -379,13 +380,10 @@
     spotIdx = Math.min(spotIdx, APPS.length - 1);
     const auto = !reduceMotion && APPS.length > 1;
     const slides = APPS.map((app, i) => `
-      <article class="spot__slide${i === spotIdx ? ' is-active' : ''}" style="${accent(app)}" aria-roledescription="slide" aria-label="${esc(app.name)}" ${i === spotIdx ? '' : 'aria-hidden="true"'}>
-        <div class="spot__bg" aria-hidden="true"></div>
+      <article class="spot__slide${i === spotIdx ? ' is-active' : ''}" style="${accent(app)}" aria-roledescription="slide" aria-label="${esc(app.name)}"${i === spotIdx ? '' : ' inert aria-hidden="true"'}>
         <div class="spot__content">
           <div class="spot__meta">
-            <span class="spot__label">${ic('star')}${esc(t('featured'))}</span>
             <span class="badge" data-ver="${esc(app.id)}">${esc(version(app))}</span>
-            ${newBadge(app)}
           </div>
           <h2>${esc(app.name)}</h2>
           <p>${esc(tx(app.tagline))}</p>
@@ -394,14 +392,7 @@
             <a class="btn btn--ghost btn--lg" href="#/${esc(app.id)}">${esc(t('details'))}${ic('arrow', 'ic--sm ic-arrow')}</a>
           </div>
         </div>
-        <div class="spot__art" aria-hidden="true">
-          ${rings(3)}
-          <img class="spot__glow" src="${esc(app.icon)}" alt="">
-          <div class="spot__icon-wrap">
-            <img class="spot__icon" src="${esc(app.icon)}" alt="" width="196" height="196">
-            <div class="spot__reflect"><img src="${esc(app.icon)}" alt=""></div>
-          </div>
-        </div>
+        ${artwork(app)}
       </article>`).join('');
     const thumbs = APPS.length > 1 ? `
       <div class="spot__nav">
@@ -427,6 +418,7 @@
     $$('.spot__slide', spot).forEach((s, k) => {
       const on = k === spotIdx;
       s.classList.toggle('is-active', on);
+      s.inert = !on;
       if (on) s.removeAttribute('aria-hidden'); else s.setAttribute('aria-hidden', 'true');
     });
     $$('.spot__thumb', spot).forEach((b, k) => {
@@ -456,23 +448,25 @@
     swipe = null;
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) spotGo(spotIdx + (dx < 0 ? 1 : -1));
   }, { passive: true });
+  view.addEventListener('pointercancel', () => { swipe = null; });
 
-  function tile(app, i) {
+  function tile(app) {
     return `
-      <article class="tile" style="${accent(app)};--i:${i}">
+      <article class="tile" style="${accent(app)}">
         <a class="tile__link" href="#/${esc(app.id)}" aria-label="${esc(app.name)} — ${esc(t('details'))}"></a>
         <div class="tile__cover">
-          <img class="tile__blur" src="${esc(app.icon)}" alt="" aria-hidden="true">
-          <img class="tile__icon" src="${esc(app.icon)}" alt="" width="116" height="116" style="view-transition-name:${vtName(app)}">
-          <div class="tile__tags">${newBadge(app)}<span class="badge" data-ver="${esc(app.id)}">${esc(version(app))}</span></div>
-          <a class="tile__dl" href="${esc(downloadUrl(app))}" data-download="${esc(app.id)}" aria-label="${esc(t('downloadApp').replace('{app}', app.name))}" title="${esc(t('download'))}">${dlIcon()}</a>
+          <img class="tile__icon" src="${esc(app.icon)}" alt="" width="54" height="54" style="view-transition-name:${vtName(app)}">
+          <div class="tile__tags"><span class="badge" data-ver="${esc(app.id)}">${esc(version(app))}</span>${newBadge(app)}</div>
         </div>
         <div class="tile__body">
           <h3>${highlight(app.name)}</h3>
           <p>${highlight(tx(app.tagline))}</p>
-          <div class="tile__meta">
-            <span class="tile__size">${ic('package', 'ic--xs')}<span data-size="${esc(app.id)}"></span></span>
-            <span class="tile__cta">${esc(t('details'))}${ic('arrow', 'ic--sm')}</span>
+        </div>
+        <div class="tile__meta">
+          <span class="tile__cta">${esc(t('details'))}${ic('arrow', 'ic--sm')}</span>
+          <div class="tile__actions">
+            <span class="tile__size" data-size="${esc(app.id)}"></span>
+            <a class="tile__dl" href="${esc(downloadUrl(app))}" data-download="${esc(app.id)}" aria-label="${esc(t('downloadApp').replace('{app}', app.name))}" title="${esc(t('download'))}">${dlIcon()}</a>
           </div>
         </div>
       </article>`;
@@ -480,22 +474,20 @@
 
   function renderHome() {
     const list = APPS.filter(matches);
-    const more = !query ? `<div class="tile tile--soon" style="--i:${list.length}" aria-hidden="true"><div class="tile__cover">${ic('sparkle')}</div><div class="tile__body"><p>${esc(t('more'))}</p></div></div>` : '';
     const grid = list.length
-      ? `<div class="tiles">${list.map(tile).join('')}${more}</div>`
-      : `<div class="empty">${ic('search')}<b>${esc(t('noResultsFor').replace('{q}', search.value.trim()))}</b><span>${esc(t('noResultsHint'))}</span></div>`;
+      ? `<div class="tiles">${list.map(tile).join('')}</div>`
+      : `<div class="empty" role="status">${ic('search')}<b>${esc(t('noResultsFor').replace('{q}', search.value.trim()))}</b><span>${esc(t('noResultsHint'))}</span></div>`;
     view.innerHTML = `
       <section class="home">
-        <header class="home__head">
-          <div>
-            <p class="eyebrow"><span class="dot"></span>SAT · Windows 10 / 11</p>
-            <h1><span class="gold-text">${esc(t('library'))}</span></h1>
-            <p class="home__sub"><span class="home__count">${esc(t('appsCount')(APPS.length))}</span> · ${esc(t('homeSub'))}</p>
-          </div>
+        <header class="page-head home__head">
+          <h1>${esc(t('library'))}</h1>
+          <p>${ic('monitor', 'ic--sm')}${esc(t('homeSub'))}</p>
         </header>
         ${!query ? spotlight() : ''}
-        <div class="section-head"><h2>${esc(query ? t('results') : t('allApps'))}</h2><span class="pill">${list.length}</span></div>
-        ${grid}
+        <section class="catalog" aria-labelledby="catalog-title">
+          <h2 id="catalog-title">${esc(query ? t('results') : t('allApps'))}</h2>
+          ${grid}
+        </section>
       </section>`;
     document.title = t('title');
   }
@@ -515,16 +507,12 @@
   }
 
   function renderDetail(app) {
-    const feats = (app.features || []).map((f, i) => `
-      <div class="feat" style="--i:${i}">
+    const feats = (app.features || []).map((f) => `
+      <div class="feat">
         <span class="feat__ic">${ic(f.icon || 'check')}</span>
         <div><h3>${esc(tx(f.title))}</h3><p>${esc(tx(f.text))}</p></div>
       </div>`).join('');
     const info = (app.info || []).map((r) => `<div><dt>${esc(tx(r.label))}</dt><dd>${esc(tx(r.value))}</dd></div>`).join('');
-    const infoAll = `
-      <div><dt>${esc(t('version'))}</dt><dd class="mono" data-ver="${esc(app.id)}">${esc(version(app))}</dd></div>
-      <div><dt>${esc(t('released'))}</dt><dd class="mono"><time data-date="${esc(app.id)}"></time></dd></div>
-      ${info}`;
     const others = APPS.filter((a) => a.id !== app.id);
     const osNote = userOs ? `
       <div class="os-note">${ic('monitor')}<p>${esc(t('os').replace('{os}', userOs))}</p>
@@ -532,28 +520,15 @@
 
     view.innerHTML = `
       <article class="detail" style="${accent(app)}">
-        <nav class="crumbs" aria-label="Breadcrumb">
+        <nav class="crumbs" aria-label="${esc(t('breadcrumbs'))}">
           <a href="#/">${ic('back', 'ic--sm')}${esc(t('back'))}</a>${ic('chevron', 'ic--xs')}<span aria-current="page">${esc(app.name)}</span>
         </nav>
         <header class="banner">
-          <div class="banner__art" aria-hidden="true">
-            ${rings(3)}
-            <img class="banner__art-glow" src="${esc(app.icon)}" alt="">
-            <img class="banner__art-icon" src="${esc(app.icon)}" alt="">
-          </div>
           <div class="banner__content">
-            <img class="banner__icon" src="${esc(app.icon)}" alt="" width="112" height="112" style="view-transition-name:${vtName(app)}">
-            <div>
-              <div class="banner__eyebrow">
-                <span class="badge">${ic('monitor')}Windows 10 / 11</span>
-                <span class="badge" data-ver="${esc(app.id)}">${esc(version(app))}</span>
-                ${newBadge(app)}
-              </div>
-              <h1>${esc(app.name)}</h1>
-              <p class="banner__tag">${esc(tx(app.tagline))}</p>
-            </div>
+            <h1>${esc(app.name)}</h1>
+            <p>${esc(tx(app.tagline))}</p>
           </div>
-          <span class="banner__frame" aria-hidden="true"></span>
+          ${artwork(app, vtName(app))}
         </header>
 
         <div class="actionbar">
@@ -562,10 +537,9 @@
             <span class="btn__label"><b>${esc(t('download'))}</b><small>${esc(t('installer'))} .exe · <span data-size="${esc(app.id)}"></span></small></span>
           </a>
           <dl class="facts">
-            <div style="--i:0"><dt>${esc(t('version'))}</dt><dd data-ver="${esc(app.id)}">${esc(version(app))}</dd></div>
-            <div style="--i:1"><dt>${esc(t('size'))}</dt><dd data-size="${esc(app.id)}"></dd></div>
-            <div style="--i:2"><dt>${esc(t('released'))}</dt><dd data-date="${esc(app.id)}"></dd></div>
-            <div style="--i:3"><dt>${esc(t('system'))}</dt><dd class="facts__os">${ic('monitor', 'ic--sm')}Windows 10 / 11</dd></div>
+            <div><dt>${esc(t('version'))}</dt><dd data-ver="${esc(app.id)}">${esc(version(app))}</dd></div>
+            <div><dt>${esc(t('released'))}</dt><dd><time data-date="${esc(app.id)}"></time></dd></div>
+            <div><dt>${esc(t('system'))}</dt><dd class="facts__os">${ic('monitor', 'ic--sm')}Windows 10 / 11</dd></div>
           </dl>
         </div>
         ${osNote}
@@ -579,18 +553,16 @@
             </section>
             ${feats ? `<section class="block"><h2>${esc(t('features'))}</h2><div class="feats">${feats}</div></section>` : ''}
           </div>
-          <aside class="detail__side">
-            <section class="panel"><h3>${esc(t('info'))}</h3><dl class="info">${infoAll}</dl></section>
-          </aside>
+          ${info ? `<aside class="detail__side"><section class="panel"><h2>${esc(t('info'))}</h2><dl class="info">${info}</dl></section></aside>` : ''}
         </div>
 
         ${others.length ? `
-        <section class="block more" style="margin-top:44px">
+        <section class="block more">
           <h2>${esc(t('others'))}</h2>
           <div class="minis">
             ${others.map((o) => `
               <a class="mini" href="#/${esc(o.id)}" style="${accent(o)}">
-                <img src="${esc(o.icon)}" alt="" width="56" height="56" style="view-transition-name:${vtName(o)}">
+                <img src="${esc(o.icon)}" alt="" width="48" height="48" style="view-transition-name:${vtName(o)}">
                 <span class="mini__txt"><b>${esc(o.name)}</b><small>${esc(tx(o.tagline))}</small></span>
                 ${ic('arrow')}
               </a>`).join('')}
@@ -603,8 +575,8 @@
   function renderPrivacy() {
     view.innerHTML = `
       <article class="privacy">
-        <nav class="crumbs"><a href="#/">${ic('back', 'ic--sm')}${esc(t('back'))}</a></nav>
-        <header class="privacy__head"><h1>${esc(t('privacy'))}</h1><p>${esc(t('privacyIntro'))}</p></header>
+        <nav class="crumbs" aria-label="${esc(t('breadcrumbs'))}"><a href="#/">${ic('back', 'ic--sm')}${esc(t('back'))}</a></nav>
+        <header class="page-head privacy__head"><h1>${esc(t('privacy'))}</h1><p>${esc(t('privacyIntro'))}</p></header>
         <section class="block distribution">
           <h2>${esc(t('privacyHosting'))}</h2>
           <p>${esc(t('privacyHostingText'))}</p>
@@ -643,7 +615,7 @@
   function render() {
     const id = route();
     const app = id ? byId(id) : null;
-    renderSidebar(app ? app.id : null);
+    renderSidebar(id || null);
     if (!id) renderHome();
     else if (id === 'privacy') renderPrivacy();
     else if (app) renderDetail(app);
@@ -655,23 +627,30 @@
 
   /* ---------------- Routing with view transitions ---------------- */
   function navigate() {
-    const update = () => { window.scrollTo({ top: 0, behavior: 'instant' }); render(); };
+    const update = () => {
+      render();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      view.focus({ preventScroll: true });
+    };
     if (document.startViewTransition && !reduceMotion) {
-      view.classList.add('is-morph');
-      const vt = document.startViewTransition(update);
-      vt.finished.finally(() => view.classList.remove('is-morph'));
+      document.startViewTransition(update);
     } else {
       update();
       view.classList.remove('is-entering'); void view.offsetWidth; view.classList.add('is-entering');
     }
   }
   window.addEventListener('hashchange', navigate);
+  $('.skip').addEventListener('click', (event) => {
+    event.preventDefault();
+    view.focus({ preventScroll: true });
+    view.scrollIntoView({ block: 'start' });
+  });
 
   /* ---------------- Search ---------------- */
   search.addEventListener('input', () => {
     query = search.value.trim().toLowerCase();
     const id = route();
-    renderSidebar(byId(id) ? id : null);
+    renderSidebar(id || null);
     if (!id) renderHome();
     fillMeta();
   });
@@ -704,11 +683,11 @@
     el.style.setProperty('--my', `${e.clientY - r.top}px`);
   }, { passive: true });
 
-  /* ---------------- Steam-like 3D tilt on library tiles ---------------- */
+  /* ---------------- Tile motion ---------------- */
   if (canHover && !reduceMotion) {
-    const MAX = 10; // degrees
+    const MAX = 3; // degrees
     view.addEventListener('pointermove', (e) => {
-      const tl = e.target.closest && e.target.closest('.tile:not(.tile--soon)');
+      const tl = e.target.closest && e.target.closest('.tile');
       if (!tl) return;
       const r = tl.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width - 0.5;
@@ -764,8 +743,8 @@
     modal.style.setProperty('--a1', app.colors[0]);
     modal.style.setProperty('--a2', app.colors[1]);
     $('#mdIcon').src = app.icon;
-    $('#mdTitle').textContent = t('mdTitle');
-    $('#mdSub').textContent = t('mdSub').replace('{app}', app.name);
+    $('#mdTitle').textContent = t('mdTitle').replace('{app}', app.name);
+    $('#mdSub').textContent = t('mdSub');
     $('#mdSteps').innerHTML = ['md1', 'md2', 'md3'].map((k) => `<li>${t(k).replace('{file}', esc(assetName(app)))}</li>`).join('');
     const resource = $('#mdResource');
     if (resource) {

@@ -1,11 +1,11 @@
 {
   "apps": {
     "downloader-studio": {
-      "v": "6.1.4",
-      "date": "2026-11-22T19:00:38Z",
-      "size": 54844061,
+      "v": "6.1.5",
+      "date": "2026-11-25T19:11:22Z",
+      "size": 54886750,
       "file": "DownloaderStudio-Setup.exe",
-      "url": "https://github.com/Aropatx/DownloaderStudio-Installer/releases/tag/v6.1.4"
+      "url": "https://github.com/Aropatx/DownloaderStudio-Installer/releases/tag/v6.1.5"
     },
     "replay": {
       "v": "2.5.3",

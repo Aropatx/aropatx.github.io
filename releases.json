@@ -8,11 +8,11 @@
       "url": "https://github.com/Aropatx/DownloaderStudio-Installer/releases/tag/v6.1.5"
     },
     "replay": {
-      "v": "2.5.3",
-      "date": "2026-11-23T18:43:05Z",
-      "size": 117903362,
+      "v": "2.5.4",
+      "date": "2026-11-25T20:14:54Z",
+      "size": 65934553,
       "file": "Replay-Setup.exe",
-      "url": "https://github.com/Aropatx/Replay/releases/tag/v2.5.3"
+      "url": "https://github.com/Aropatx/Replay/releases/tag/v2.5.4"
     }
   }
 }
